@@ -14,13 +14,13 @@ namespace TodoList
     public partial class form_TodoList : Form
     {
         SQL db = new SQL();
-        SqlConnection dbcon = new SqlConnection();
-        SqlConnectionStringBuilder connectionString = new SqlConnectionStringBuilder();
+        SqlConnection dbcon;
 
         public form_TodoList()
         {
             InitializeComponent();
-            connectToDatabase();
+            dbcon = db.connectToDatabase("TodoList"); 
+
         }
 
         private void button_AddToTodo_Click(object sender, EventArgs e)
@@ -36,22 +36,7 @@ namespace TodoList
 
         }
 
-        private void connectToDatabase()
-        {
-            connectionString.DataSource = "DILLON-HOME-PC";
-            connectionString.InitialCatalog = "TodoList";
-            connectionString.IntegratedSecurity = true;
-
-            dbcon = db.ConnectToDatabase(connectionString.ConnectionString);
-            try
-            {
-                dbcon.Open();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.ToString(), ex.InnerException);
-            }
-        }
+       
 
         private void button_CompleteTask_Click(object sender, EventArgs e)
         {
@@ -70,14 +55,15 @@ namespace TodoList
         
         private void button_ViewCompletedTasks_Click(object sender, EventArgs e)
         {
-
+            form_completedTasks form = new form_completedTasks();
+            form.ShowDialog();
+            
         }
 
         private void form_TodoList_Load(object sender, EventArgs e)
         {
             // TODO: This line of code loads data into the 'todoListDataSet.Tasks' table. You can move, or remove it, as needed.
             this.tasksTableAdapter.Fill(this.todoListDataSet.Tasks);
-
         }
     }
 }
